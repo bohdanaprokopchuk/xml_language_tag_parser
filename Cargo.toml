@@ -6,6 +6,7 @@ authors = ["Bohdana Prokopchuk"]
 description = "A simple XML language tag parser"
 license = "MIT"
 readme = "README.md"
+exclude = ["target/*", "*.md", "*.lock", "examples/*", ".git/*"]
 
 [dependencies]
 anyhow = "1.0"
