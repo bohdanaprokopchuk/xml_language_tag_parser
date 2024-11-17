@@ -1,38 +1,20 @@
-/// Matches any whitespace character, including spaces, tabs, newlines, and carriage returns.
 WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
 
-/// The start rule for parsing, which matches the beginning of the input (SOI), followed by an element, and then the end of the input (EOI).
 start = { SOI ~ element ~ EOI }
 
-/// An element, which can be either an opening and closing tag pair or a self-closing tag.
 element = { open_tag ~ content* ~ close_tag | self_closing_tag }
 
-/// An opening tag, which consists of a `<`, followed by the tag name, optional attributes, and ends with a `>`.
 open_tag = { "<" ~ tag_name ~ (WHITESPACE* ~ attributes)? ~ WHITESPACE* ~ ">" }
-
-/// A closing tag, which consists of a `</`, followed by the tag name, optional whitespace, and ends with a `>`.
 close_tag = { "</" ~ tag_name ~ WHITESPACE* ~ ">" }
-
-/// A self-closing tag, which is similar to an opening tag but ends with a `/ >` instead of `>`.
 self_closing_tag = { "<" ~ tag_name ~ (WHITESPACE* ~ attributes)? ~ WHITESPACE* ~ "/>" }
 
-/// The content inside an element, which can either be another element or plain text.
 content = { element | text }
 
-/// Text content, which matches any character except `<` or `>`.
 text = { (!("<" | ">") ~ ANY)+ }
 
-/// A sequence of attributes, which is one or more individual attributes separated by optional whitespace.
 attributes = { attribute ~ (WHITESPACE* ~ attribute)* }
-
-/// An individual attribute, which consists of a name, an equals sign (`=`), and a quoted value.
 attribute = { attr_name ~ "=" ~ "\"" ~ attr_value ~ "\"" }
-
-/// The name of an attribute, which can consist of alphanumeric characters, dashes (`-`), underscores (`_`), and colons (`:`).
 attr_name = @{ (ASCII_ALPHANUMERIC | "-" | "_" | ":")* }
-
-/// The value of an attribute, which can be any sequence of characters except for a double quote (`"`).
 attr_value = @{ (!"\"" ~ ANY)+ }
 
-/// The name of a tag, which must start with an alphabetic character, followed by alphanumeric characters, dashes (`-`), or underscores (`_`).
 tag_name = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "-" | "_")* }
