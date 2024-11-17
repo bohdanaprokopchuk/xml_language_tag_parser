@@ -1,5 +1,9 @@
 # XML Language Tag Parser 
 
+- **Link:** (https://crates.io/crates/xml_language_tag_parser)
+- **Docs:** (https://docs.rs/xml_language_tag_parser/0.1.4/xml_language_tag_parser/)
+
+
 ## Brief Description
 The **XML Language Tag Parser** is a Rust-based parser designed to handle and parse XML documents with specific focus on extracting language tags, elements, attributes, and content. This parser is intended to facilitate processing XML documents in applications where structured content needs to be validated and manipulated. The parsed structure includes elements, attributes, and content, allowing for further use in applications that require such data in a structured format.
 
