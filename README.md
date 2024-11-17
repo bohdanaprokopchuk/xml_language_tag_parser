@@ -1,5 +1,10 @@
 # XML Language Tag Parser 
 
+### Пояснення:
+- **Link:** [Репозиторій GitHub](https://github.com/bohdanaprokopchuk/xml_language_tag_parser.git) 
+- **Docs:** [docs.rs](file:///C:/Users/Dana/rust-learning-path/xml_language_tag_parser/target/doc/xml_language_tag_parser/index.html)
+
+
 ## Brief Description
 The **XML Language Tag Parser** is a Rust-based parser designed to handle and parse XML documents with specific focus on extracting language tags, elements, attributes, and content. This parser is intended to facilitate processing XML documents in applications where structured content needs to be validated and manipulated. The parsed structure includes elements, attributes, and content, allowing for further use in applications that require such data in a structured format.
 
