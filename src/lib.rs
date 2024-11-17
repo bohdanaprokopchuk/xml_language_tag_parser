@@ -1,72 +1,126 @@
-use regex::Regex;
+use pest::Parser;
+use pest_derive::Parser;
 use thiserror::Error;
 
-/// Enum representing the different errors that can occur while parsing an XML tag.
-///
-/// `InvalidFormat`: Indicates that the XML tag format is invalid.
-#[derive(Error, Debug)]
-pub enum ParseError {
-    #[error("Invalid XML format: {0}")]
-    InvalidFormat(String),
-}
-
-/// Represents an XML tag.
-///
-/// This struct contains the name of the tag, its attributes, and a flag
-/// indicating whether it is self-closing or not.
-pub struct XMLTag {
-/// The name of the XML tag.
-    pub name: String,
-
-/// The attributes associated with the tag, where each key is the
-/// attribute's name, and the value is the attribute's value.
-    pub attributes: Vec<(String, String)>,
-
-/// A flag indicating whether the tag is self-closing.
-    pub is_self_closing: bool,
-}
-
-/// A parser for XML-like tags.
+#[derive(Parser)]
+#[grammar = "grammar.pest"]
 pub struct XMLParser;
 
-impl XMLParser {
-/// Parses an XML tag string into an `XMLTag` object.
-///
-/// This function accepts a string containing an XML tag, such as `<tag name="value" />`,
-/// and attempts to parse it into an `XMLTag` struct. It extracts the tag name, attributes,
-/// and checks whether the tag is self-closing.
-///
-/// # Parameters
-///
-/// - `tag_str`: A string slice that contains the XML tag to be parsed.
-///
-/// # Returns
-///
-/// Returns a `Result` with either an `XMLTag` on success or a `ParseError` if the tag is malformed.
+#[derive(Debug)]
+pub struct Element {
+    pub tag_name: String,
+    pub attributes: Vec<Attribute>,
+    pub content: Vec<Element>,
+    pub text: Option<String>,
+}
 
-    pub fn parse_tag(tag_str: &str) -> Result<XMLTag, ParseError> {
-        let re = Regex::new(r"^<(\w+)([^>]*)\s*/?>$").unwrap();
+#[derive(Debug)]
+pub struct Attribute {
+    pub name: String,
+    pub value: String,
+}
 
-        if let Some(caps) = re.captures(tag_str) {
-            let name = caps.get(1).unwrap().as_str().to_string();
-            let attributes_str = caps.get(2).unwrap().as_str();
-            let is_self_closing = tag_str.ends_with("/>");
+#[derive(Error, Debug)]
+pub enum ParseError {
+    #[error("Failed to parse XML")]
+    PestError(#[from] Box<pest::error::Error<Rule>>),
 
-            let mut attributes = Vec::new();
-            let attr_re = Regex::new(r#"(\w+)\s*=\s*"([^"]*)""#).unwrap();
-            for attr_cap in attr_re.captures_iter(attributes_str) {
-                let key = attr_cap.get(1).unwrap().as_str().to_string();
-                let value = attr_cap.get(2).unwrap().as_str().to_string();
-                attributes.push((key, value));
+    #[error("Unexpected end of input")]
+    UnexpectedEndOfInput,
+
+    #[error("Invalid element: {0}")]
+    InvalidElement(String),
+
+    #[error("Missing closing tag for element: {0}")]
+    MissingClosingTag(String),
+
+    #[error("Invalid attribute value: {0}")]
+    InvalidAttributeValue(String),
+}
+
+pub fn parse_xml(input: &str) -> Result<Vec<Element>, ParseError> {
+    let pairs = XMLParser::parse(Rule::start, input)
+        .map_err(|e| ParseError::PestError(Box::new(e)))?;
+
+    let mut elements = Vec::new();
+
+    for pair in pairs {
+        for inner_pair in pair.into_inner() {
+            if inner_pair.as_rule() == Rule::element {
+                elements.push(parse_element(inner_pair)?);
             }
-
-            Ok(XMLTag {
-                name,
-                attributes,
-                is_self_closing,
-            })
-        } else {
-            Err(ParseError::InvalidFormat(tag_str.to_string()))
         }
     }
+
+    Ok(elements)
+}
+
+fn parse_element(pair: pest::iterators::Pair<Rule>) -> Result<Element, ParseError> {
+    let mut tag_name = String::new();
+    let mut attributes = Vec::new();
+    let mut content = Vec::new();
+    let mut text = None;
+
+    for inner_pair in pair.into_inner() {
+        match inner_pair.as_rule() {
+            Rule::open_tag => {
+                for open_tag_child in inner_pair.into_inner() {
+                    match open_tag_child.as_rule() {
+                        Rule::tag_name => tag_name = open_tag_child.as_str().to_string(),
+                        Rule::attributes => attributes = parse_attributes(open_tag_child)?,
+                        _ => {}
+                    }
+                }
+            }
+            Rule::content => {
+                for content_pair in inner_pair.into_inner() {
+                    match content_pair.as_rule() {
+                        Rule::element => content.push(parse_element(content_pair)?),
+                        Rule::text => {
+                            text = Some(content_pair.as_str().to_string());
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            Rule::close_tag => {}
+            _ => {}
+        }
+    }
+
+    if tag_name.is_empty() {
+        return Err(ParseError::InvalidElement("Empty tag name".to_string()));
+    }
+
+    Ok(Element {
+        tag_name,
+        attributes,
+        content,
+        text,
+    })
+}
+
+fn parse_attributes(pair: pest::iterators::Pair<Rule>) -> Result<Vec<Attribute>, ParseError> {
+    let mut attributes = Vec::new();
+
+    for attribute_pair in pair.into_inner() {
+        let mut name = String::new();
+        let mut value = String::new();
+
+        for attr_part in attribute_pair.into_inner() {
+            match attr_part.as_rule() {
+                Rule::attr_name => name = attr_part.as_str().to_string(),
+                Rule::attr_value => value = attr_part.as_str().to_string(),
+                _ => {}
+            }
+        }
+
+        if !name.is_empty() && !value.is_empty() {
+            attributes.push(Attribute { name, value });
+        } else {
+            return Err(ParseError::InvalidAttributeValue(name));
+        }
+    }
+
+    Ok(attributes)
 }

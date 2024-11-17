@@ -1,5 +1,8 @@
 PROGRAM_NAME=xml_language_tag_parser
 
+build:
+	cargo build
+
 run:
     cargo run
 
@@ -9,8 +12,5 @@ test:
 fmt:
     cargo fmt
 
-lint:
-    cargo clippy
-
-
-
+clippy:
+    cargo clippy -- -D warnings

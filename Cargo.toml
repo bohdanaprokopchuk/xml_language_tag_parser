@@ -6,10 +6,14 @@ authors = ["Bohdana Prokopchuk"]
 description = "A simple XML language tag parser"
 license = "MIT"
 readme = "README.md"
-exclude = ["target/*", "*.md", "*.lock", "examples/*", ".git/*"]
+exclude = ["target/*"]
 
 [dependencies]
 anyhow = "1.0"
-clap = "4.5.20"
-regex = "1.11.1"
+clap = "4.5.21"
+pest = "2.7.14"
+pest_derive = "2.7.14"
 thiserror = "1.0"
+
+[package.metadata.pest]
+grammar = "grammar.pest"
