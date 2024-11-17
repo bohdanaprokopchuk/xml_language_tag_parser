@@ -17,3 +17,6 @@ thiserror = "1.0"
 
 [package.metadata.pest]
 grammar = "grammar.pest"
+
+[documentation]
+readme = "docs.md"

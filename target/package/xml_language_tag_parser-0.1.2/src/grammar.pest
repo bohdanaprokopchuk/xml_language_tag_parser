@@ -1,0 +1,20 @@
+WHITESPACE = _{ " " | "\t" | "\n" | "\r" }
+
+start = { SOI ~ element ~ EOI }
+
+element = { open_tag ~ content* ~ close_tag | self_closing_tag }
+
+open_tag = { "<" ~ tag_name ~ (WHITESPACE* ~ attributes)? ~ WHITESPACE* ~ ">" }
+close_tag = { "</" ~ tag_name ~ WHITESPACE* ~ ">" }
+self_closing_tag = { "<" ~ tag_name ~ (WHITESPACE* ~ attributes)? ~ WHITESPACE* ~ "/>" }
+
+content = { element | text }
+
+text = { (!("<" | ">") ~ ANY)+ }
+
+attributes = { attribute ~ (WHITESPACE* ~ attribute)* }
+attribute = { attr_name ~ "=" ~ "\"" ~ attr_value ~ "\"" }
+attr_name = @{ (ASCII_ALPHANUMERIC | "-" | "_" | ":")* }
+attr_value = @{ (!"\"" ~ ANY)+ }
+
+tag_name = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "-" | "_")* }

@@ -73,4 +73,4 @@ The grammar for parsing XML documents with language tags describes the structure
 - **Description**: The name of a tag, which must start with an alphabetic character, followed by alphanumeric characters, dashes (`-`), or underscores (`_`).
 - **Rule**: `tag_name = @{ ASCII_ALPHA ~ (ASCII_ALPHANUMERIC | "-" | "_")* }`
 
-
+- [documentation](https://docs.rs/xml_language_tag_parser/0.1.2/xml_language_tag_parser/)

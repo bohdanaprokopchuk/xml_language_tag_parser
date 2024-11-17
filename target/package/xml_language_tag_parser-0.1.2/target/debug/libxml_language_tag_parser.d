@@ -1,0 +1,1 @@
+C:\Users\Dana\rust-learning-path\xml_language_tag_parser\target\package\xml_language_tag_parser-0.1.2\target\debug\libxml_language_tag_parser.rlib: C:\Users\Dana\rust-learning-path\xml_language_tag_parser\target\package\xml_language_tag_parser-0.1.2\src\grammar.pest C:\Users\Dana\rust-learning-path\xml_language_tag_parser\target\package\xml_language_tag_parser-0.1.2\src\lib.rs

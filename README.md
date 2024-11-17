@@ -1,7 +1,7 @@
 # XML Language Tag Parser 
 
-- **Link** (https://crates.io/crates/xml_language_tag_parser/0.1.1) 
-- **Docs:** (https://docs.rs/xml_language_tag_parser/0.1.1/xml_language_tag_parser/index.html)
+- **Link** (https://crates.io/crates/xml_language_tag_parser/0.1.2) 
+- **Docs:** (https://docs.rs/xml_language_tag_parser/latest/xml_language_tag_parser/index.html)
 
 
 ## Brief Description
