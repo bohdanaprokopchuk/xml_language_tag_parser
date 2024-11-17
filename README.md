@@ -1,8 +1,7 @@
 # XML Language Tag Parser 
 
-### Пояснення:
-- **Link:** [Репозиторій GitHub](https://github.com/bohdanaprokopchuk/xml_language_tag_parser.git) 
-- **Docs:** [docs.rs](file:///C:/Users/Dana/rust-learning-path/xml_language_tag_parser/target/doc/xml_language_tag_parser/index.html)
+- **Link** (https://crates.io/crates/xml_language_tag_parser/0.1.1) 
+- **Docs:** (file:///C:/Users/Dana/rust-learning-path/xml_language_tag_parser/target/doc/xml_language_tag_parser/index.html)
 
 
 ## Brief Description
