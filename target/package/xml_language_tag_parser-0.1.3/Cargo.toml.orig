@@ -1,0 +1,22 @@
+[package]
+name = "xml_language_tag_parser"
+version = "0.1.3"
+edition = "2021"
+authors = ["Bohdana Prokopchuk"]
+description = "A simple XML language tag parser"
+license = "MIT"
+readme = "README.md"
+exclude = ["target/*"] 
+
+[dependencies]
+anyhow = "1.0"
+clap = "4.5.21"
+pest = "2.7.14"
+pest_derive = "2.7.14"
+thiserror = "1.0"
+
+[package.metadata.pest]
+grammar = "grammar.pest"
+
+[documentation]
+readme = "docs.md"
