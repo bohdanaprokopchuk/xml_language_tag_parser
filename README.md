@@ -1,4 +1,4 @@
-# XML Language Tag Parser 
+﻿# XML Language Tag Parser 
 
 - **Link:** (https://crates.io/crates/xml_language_tag_parser)
 - **Docs:** (https://docs.rs/xml_language_tag_parser/0.1.4/xml_language_tag_parser/)
@@ -16,6 +16,11 @@ The parsing process involves using the `pest` library to define grammar rules fo
 3. **Attribute handling**: The parser identifies the attributes within each element, ensuring they follow the correct format (e.g., `id="123"`).
 4. **Content handling**: The parser processes both text content and nested elements.
 5. **Error Handling**: If the XML is malformed or contains any issues (like missing closing tags or invalid attributes), the parser raises appropriate errors for correction.
+
+### Grammar Diagram
+
+![Grammar Diagram](grammar-diagram.jpg)
+
 
 ### Grammar Rules
 
